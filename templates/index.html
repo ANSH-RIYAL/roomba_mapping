@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roomba Map Processor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .error {
+            color: red;
+            margin: 10px 0;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .result img {
+            max-width: 100%;
+            margin-bottom: 10px;
+        }
+        .download-btn {
+            background: #28a745;
+            margin-right: 10px;
+        }
+        .download-btn:hover {
+            background: #218838;
+        }
+        #loading {
+            display: none;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Roomba Map Processor</h1>
+    
+    <div class="container">
+        <form id="uploadForm">
+            <div class="form-group">
+                <label for="storeId">Store ID:</label>
+                <input type="text" id="storeId" name="storeId" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="floorId">Floor ID:</label>
+                <input type="text" id="floorId" name="floorId" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="mapFile">Map Image (JPEG, JPG, PNG):</label>
+                <input type="file" id="mapFile" name="mapFile" accept="image/jpeg,image/jpg,image/png" required>
+            </div>
+            
+            <button type="submit" id="submitBtn">Process Map</button>
+        </form>
+        
+        <div id="loading">Processing...</div>
+        <div id="error" class="error"></div>
+    </div>
+
+    <div id="result" class="result" style="display: none;">
+        <h2>Processed Map</h2>
+        <img id="processedImage" src="" alt="Processed Map">
+        <div>
+            <button class="download-btn" onclick="downloadProcessedImage()">Download Processed Image</button>
+            <button class="download-btn" onclick="downloadVerticesJson()">Download Vertices JSON</button>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+        const result = document.getElementById('result');
+        const processedImage = document.getElementById('processedImage');
+        let currentResult = null;
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('file', document.getElementById('mapFile').files[0]);
+            formData.append('store_id', document.getElementById('storeId').value);
+            formData.append('floor_id', document.getElementById('floorId').value);
+            
+            loading.style.display = 'block';
+            error.textContent = '';
+            result.style.display = 'none';
+            
+            try {
+                const response = await fetch('/process-map', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                currentResult = data;
+                processedImage.src = data.processed_image;
+                result.style.display = 'block';
+            } catch (err) {
+                error.textContent = err.message || 'An error occurred while processing the map';
+            } finally {
+                loading.style.display = 'none';
+            }
+        };
+
+        function downloadProcessedImage() {
+            if (currentResult) {
+                window.open(currentResult.processed_image, '_blank');
+            }
+        }
+
+        function downloadVerticesJson() {
+            if (currentResult) {
+                window.open(currentResult.vertices_file, '_blank');
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -58,7 +58,7 @@ class RoombaMapProcessor:
         approx = cv2.approxPolyDP(contour, epsilon, True)
         return [tuple(map(int, point[0])) for point in approx]
 
-    def process_map(self, image_path):
+    def process_map(self, image_path, output_image_path, output_vertices_path):
         """
         Process the floor plan image and extract vertices
         """
@@ -115,8 +115,8 @@ class RoombaMapProcessor:
                 'g-', linewidth=2, label='Store Boundary')
         
         # Plot internal spaces in different colors
-        colors = ['r-', 'b-']
-        for idx, polygon in enumerate(polygons[:2]):  # Only plot first two spaces
+        colors = ['r-', 'b-', 'y-']  # Added yellow for third polygon
+        for idx, polygon in enumerate(polygons[:3]):  # Plot first three spaces
             vertices = np.array(polygon["polygon_vertices"])
             color = colors[idx % len(colors)]
             plt.plot(np.append(vertices[:, 0], vertices[0, 0]),
@@ -125,30 +125,17 @@ class RoombaMapProcessor:
         
         plt.legend()
         plt.axis('off')
-        plt.savefig('data/processed_map.png', dpi=300, bbox_inches='tight')
+        plt.savefig(output_image_path, dpi=300, bbox_inches='tight')
         plt.close()
         
         # Create result dictionary
         result = {
             "store_vertices": store_vertices,
-            "polygons": polygons[:2]  # Only include first two spaces
+            "polygons": polygons[:3]  # Include first three spaces
         }
         
         # Save vertices to JSON
-        with open('data/vertices.json', 'w') as f:
+        with open(output_vertices_path, 'w') as f:
             json.dump(result, f, indent=2)
         
-        return result
-
-def main():
-    processor = RoombaMapProcessor()
-    try:
-        result = processor.process_map("data/roomba_map.jpeg")
-        print("Processing completed successfully!")
-        print("\nExtracted vertices saved to data/vertices.json")
-        print("Visualization saved to data/processed_map.png")
-    except Exception as e:
-        print(f"Error processing map: {str(e)}")
-
-if __name__ == "__main__":
-    main() 
+        return result 
