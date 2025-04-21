@@ -5,7 +5,7 @@ import json
 
 class RoombaMapProcessor:
     def __init__(self):
-        self.kernel = np.ones((3,3), np.uint8)
+        self.kernel = np.ones((5,5), np.uint8)  # Increased from 3x3 for higher resolution
         
     def preprocess_image(self, image):
         """
@@ -14,12 +14,12 @@ class RoombaMapProcessor:
         # Convert to grayscale
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         
-        # Apply bilateral filter to reduce noise while preserving edges
-        filtered = cv2.bilateralFilter(gray, 9, 75, 75)
+        # Adjust bilateral filter parameters for higher resolution
+        filtered = cv2.bilateralFilter(gray, 15, 100, 100)  # Increased from 9,75,75
         
-        # Apply adaptive thresholding
+        # Adjust adaptive threshold block size for higher resolution
         binary = cv2.adaptiveThreshold(filtered, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
-                                     cv2.THRESH_BINARY_INV, 11, 2)
+                                     cv2.THRESH_BINARY_INV, 21, 2)  # Increased from 11
         
         # Remove small noise
         binary = cv2.morphologyEx(binary, cv2.MORPH_OPEN, self.kernel)
@@ -54,7 +54,8 @@ class RoombaMapProcessor:
         Find corner points using contour approximation
         """
         perimeter = cv2.arcLength(contour, True)
-        epsilon = 0.001 * perimeter
+        # Adjust epsilon to be more sensitive for higher resolution
+        epsilon = 0.0005 * perimeter  # Decreased from 0.001 for better corner detection
         approx = cv2.approxPolyDP(contour, epsilon, True)
         return [tuple(map(int, point[0])) for point in approx]
 
@@ -62,17 +63,10 @@ class RoombaMapProcessor:
         """
         Process the floor plan image and extract vertices
         """
-        # Read image
+        # Read image at original resolution
         image = cv2.imread(image_path)
         if image is None:
             raise ValueError(f"Could not read image at {image_path}")
-        
-        # Ensure consistent image size
-        max_size = 1024
-        height, width = image.shape[:2]
-        if max(height, width) > max_size:
-            scale = max_size / max(height, width)
-            image = cv2.resize(image, None, fx=scale, fy=scale)
             
         # Get masks
         store_mask, internal_mask, gray_img = self.preprocess_image(image)
@@ -91,7 +85,8 @@ class RoombaMapProcessor:
         
         # Process internal spaces
         polygons = []
-        min_area = image.shape[0] * image.shape[1] * 0.01  # Minimum area threshold
+        # Adjust threshold to be smaller for higher resolution images
+        min_area = image.shape[0] * image.shape[1] * 0.005  # Reduced from 0.01 to 0.005
         for contour in internal_contours:
             area = cv2.contourArea(contour)
             if area > min_area:
@@ -101,6 +96,9 @@ class RoombaMapProcessor:
         
         # Sort polygons by area (largest first)
         polygons.sort(key=lambda x: cv2.contourArea(np.array(x["polygon_vertices"])), reverse=True)
+        
+        # Add image dimensions to the output
+        height, width = image.shape[:2]
         
         # Visualize results
         plt.figure(figsize=(12, 8))
@@ -128,8 +126,12 @@ class RoombaMapProcessor:
         plt.savefig(output_image_path, dpi=300, bbox_inches='tight')
         plt.close()
         
-        # Create result dictionary
+        # Create result dictionary with image dimensions
         result = {
+            "image_dimensions": {
+                "width": width,
+                "height": height
+            },
             "store_vertices": store_vertices,
             "polygons": polygons[:3]  # Include first three spaces
         }
