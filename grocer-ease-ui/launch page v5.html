@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocer-ease - Enhanced Shopping Experience</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Side Navigation Bar */
+        .sidebar {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            width: 260px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.8rem;
+            text-decoration: none;
+            padding: 0 25px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 25px;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 0 15px;
+        }
+        
+        .nav-btn {
+            padding: 14px 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .nav-btn.disabled {
+            background: rgba(255, 255, 255, 0.08);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .nav-btn i {
+            font-size: 1.4rem;
+        }
+        
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 85vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin-bottom: 40px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .cta-btn {
+            padding: 16px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 6px 15px rgba(255, 75, 43, 0.4);
+        }
+        
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 75, 43, 0.6);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 5%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 40px 30px;
+            width: 350px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .feature-card h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .feature-card p {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+        
+        /* Store Selection Section */
+        .store-section {
+            padding: 80px 5%;
+            background: #f0f4f8;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 700px;
+            margin: 0 auto 50px;
+        }
+        
+        .store-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .store-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .store-item {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .store-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            border-color: #2575fc;
+        }
+        
+        .store-item i {
+            font-size: 2.5rem;
+            color: #2575fc;
+            margin-bottom: 15px;
+        }
+        
+        .store-item h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .store-item p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+        
+        .selected-store {
+            background: #e3f2fd;
+            border-color: #2575fc;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 50px 5% 30px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+        
+        .footer-column p, .footer-column a {
+            color: #bdc3c7;
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: white;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #34495e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .social-icon:hover {
+            background: #2575fc;
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            padding-top: 30px;
+            border-top: 1px solid #34495e;
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+        
+        /* Modal for Login */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 1000px; /* Width */
+            padding: 0;
+            position: relative;
+            animation: modalAppear 0.4s ease-out;
+            overflow: hidden;
+        }
+        
+        @keyframes modalAppear {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #7f8c8d;
+            transition: color 0.3s;
+            z-index: 10;
+        }
+        
+        .close-modal:hover {
+            color: #e74c3c;
+        }
+        
+        /* login Styles */
+        .login-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .login-header {
+            background: linear-gradient(90deg, #4b6cb7, #182848);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .login-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .login-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .login-content {
+            display: flex;
+            min-height: 500px;
+        }
+        
+        .customer-section {
+            flex: 3;
+            padding: 40px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 1px solid #eee;
+        }
+        
+        .business-section {
+            flex: 1;
+            padding: 30px 20px;
+            background: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            border-color: #4b6cb7;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(75, 108, 183, 0.2);
+        }
+        
+        .btn {
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+        
+        .btn-customer {
+            background: linear-gradient(90deg, #4b6cb7, #182848);
+            color: white;
+            margin-top: 10px;
+        }
+        
+        .btn-customer:hover {
+            background: linear-gradient(90deg, #3a5ba0, #121d3d);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(75, 108, 183, 0.4);
+        }
+        
+        .business-option {
+            width: 100%;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .business-btn {
+            background: white;
+            color: #4b6cb7;
+            border: 2px solid #4b6cb7;
+            padding: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .business-btn:hover {
+            background: #4b6cb7;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(75, 108, 183, 0.3);
+        }
+        
+        .business-btn i {
+            font-size: 1.3rem;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #182848;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #4b6cb7, #182848);
+            border-radius: 2px;
+        }
+        
+        .business-section .section-title {
+            text-align: center;
+            width: 100%;
+        }
+        
+        .business-section .section-title:after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .option-item {
+            text-align: center;
+            color: #4b6cb7;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .option-item:hover {
+            color: #182848;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            color: #777;
+        }
+        
+        .divider:before, .divider:after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .divider span {
+            padding: 0 15px;
+            font-size: 0.9rem;
+        }
+        
+        .social-login {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .fb { background: #3b5998; }
+        .google { background: #dd4b39; }
+        .twitter { background: #1da1f2; }
+        
+        /* Chatbox Modal Styles */
+        .chat-modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            position: relative;
+            animation: modalAppear 0.4s ease-out;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chat-container {
+            display: flex;
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .chat-section {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #eaeaea;
+            background: #f8f9fa;
+        }
+        
+        .chat-header {
+            background: linear-gradient(90deg, #2c3e50, #4b6cb7);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .chat-header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .chat-header p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f0f5ff" opacity="0.3"/><path d="M0 0L100 100M100 0L0 100" stroke="%234b9fff" stroke-width="0.5" opacity="0.1"/></svg>');
+            background-size: 20px;
+        }
+        
+        .message {
+            max-width: 75%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            margin-bottom: 5px;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .bot-message {
+            background: #e3f2fd;
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+            border: 1px solid #bbdefb;
+        }
+        
+        .user-message {
+            background: #d1ecf1;
+            border-bottom-right-radius: 5px;
+            align-self: flex-end;
+            border: 1px solid #b2ebf2;
+        }
+        
+        .message-time {
+            display: block;
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .chat-input input:focus {
+            border-color: #4b6cb7;
+            box-shadow: 0 0 0 2px rgba(75, 108, 183, 0.2);
+        }
+        
+        .chat-input button {
+            background: #4b6cb7;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 14px 25px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .chat-input button:hover {
+            background: #3a5ca3;
+            transform: translateY(-2px);
+        }
+        
+        .shopping-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .shopping-header {
+            background: linear-gradient(90deg, #2c7744, #5aaf70);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .shopping-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .shopping-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .empty-list {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #888;
+        }
+        
+        .empty-list i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+        
+        .shopping-list {
+            list-style: none;
+        }
+        
+        .shopping-list li {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #5aaf70;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            animation: slideIn 0.4s ease-out;
+            transition: transform 0.2s;
+        }
+        
+        .shopping-list .item-details {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .shopping-list .item-options {
+            flex: 1;
+            min-width: 150px;
+            margin-top: 10px;
+        }
+        
+        .shopping-list .item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .item-options select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: white;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .shopping-list li:hover {
+            transform: translateX(5px);
+            background: #f0f5ff;
+        }
+        
+        .shopping-list input[type="checkbox"] {
+            margin-right: 15px;
+            transform: scale(1.3);
+            cursor: pointer;
+        }
+        
+        .shopping-list label {
+            flex: 1;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .shopping-list .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+        
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            margin: 0 15px;
+        }
+        
+        .quantity-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #4b9fff;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .quantity-btn:hover {
+            background: #3a8ae6;
+            transform: scale(1.1);
+        }
+        
+        .quantity-value {
+            min-width: 30px;
+            text-align: center;
+            font-weight: 600;
+            margin: 0 5px;
+        }
+        
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .delete-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .checkout button{
+            background: #be3b3b;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 14px 190px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .checkout button:hover {
+            background: #dd2a2a;
+            transform: translateY(-2px);
+        }
+
+        .checkout{
+            display: flex;
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+
+        .checkout input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .add-item {
+            display: flex;
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+        
+        .add-item input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .add-item button {
+            background: #5aaf70;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 14px 25px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .add-item button:hover {
+            background: #489c5d;
+            transform: translateY(-2px);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: #f0f5ff;
+            font-size: 0.9rem;
+            color: #4b6cb7;
+            font-weight: 500;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        /* Floating shopping list */
+        .floating-shopping-list {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            width: 300px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1900;
+            display: none;
+        }
+
+        .floating-header {
+            background: linear-gradient(90deg, #2c7744, #5aaf70);
+            color: white;
+            padding: 15px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+        }
+
+        .floating-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .floating-content {
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        /* Floorplan Styles */
+        .floorplan-container {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 1000px;
+            margin: 40px auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+        
+        .floorplan-header {
+            margin-bottom: 25px;
+        }
+        
+        .floorplan-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .floorplan-map {
+            width: 100%;
+            max-width: 800px;
+            height: 500px;
+            background: #f0f4f8;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            width: 100%;
+            height: 100%;
+            gap: 10px;
+            padding: 20px;
+        }
+        
+        .map-area {
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .map-area:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .map-area i {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #4b6cb7;
+        }
+        
+        .map-area h4 {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .produce { background-color: #5aaf70; }
+        .dairy { background-color: #4b9fff; }
+        .bakery { background-color: #ffc107; }
+        .meat { background-color: #e74c3c; }
+        .frozen { background-color: #3498db; }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+                align-items: center;
+            }
+            
+            .logo span {
+                display: none;
+            }
+            
+            .logo {
+                padding: 0 10px 20px;
+                justify-content: center;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            }
+            
+            .nav-btn span {
+                display: none;
+            }
+            
+            .nav-btn {
+                justify-content: center;
+                padding: 15px;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-height: auto;
+                padding: 15px;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+            
+            .logo {
+                padding: 0;
+                margin: 0;
+                border: none;
+            }
+            
+            .nav-links {
+                flex-direction: row;
+                gap: 10px;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .nav-btn {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .nav-btn span {
+                display: inline;
+            }
+            
+            .logo span {
+                display: inline;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .login-content {
+                flex-direction: column;
+            }
+            
+            .customer-section {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+            
+            .business-section {
+                padding: 30px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .features {
+                padding: 50px 5%;
+            }
+            
+            .chat-container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .chat-section {
+                border-right: none;
+                border-bottom: 1px solid #eaeaea;
+                min-height: 60vh;
+            }
+            
+            .shopping-section {
+                min-height: 40vh;
+            }
+            
+            .floorplan-map {
+                height: 400px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .feature-card {
+                width: 100%;
+            }
+            
+            .store-container {
+                padding: 25px 15px;
+            }
+            
+            .sidebar {
+                padding: 10px;
+            }
+            
+            .nav-btn span {
+                display: none;
+            }
+            
+            .nav-btn {
+                padding: 12px;
+            }
+            
+            .logo span {
+                display: none;
+            }
+            
+            .shopping-list li {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .shopping-list .item-controls {
+                margin-top: 10px;
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .floorplan-map {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Side Navigation Bar -->
+    <nav class="sidebar">
+        <a href="#" class="logo">
+            <i class="fas fa-store"></i>
+            <span>Grocer-ease</span>
+        </a>
+        <div class="nav-links">
+            <a href="#" class="nav-btn" id="chatBotBtn">
+                <i class="fas fa-robot"></i>
+                <span>Chat Bot</span>
+            </a>
+            <a href="#" class="nav-btn" id="loginBtn">
+                <i class="fas fa-user"></i>
+                <span>Login</span>
+            </a>
+            <a href="#" class="nav-btn" id="findStoreBtn">
+                <i class="fas fa-search-location"></i>
+                <span>All Stores</span>
+            </a>
+            <a href="#" class="nav-btn disabled" id="floorplanBtn">
+                <i class="fas fa-map"></i>
+                <span>Floorplan</span>
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Enhanced Shopping Experience</h1>
+            <p>Now with smart product selections and detailed shopping lists</p>
+            <button class="cta-btn" id="heroChatBtn">
+                <i class="fas fa-comments"></i>
+                Try Smart Shopping Assistant
+            </button>
+            <br>
+            <button class="cta-btn" id="heroFindStoreBtn">
+                <i class="fas fa-map-marker-alt"></i>
+                Find all the stores
+            </button>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-list"></i>
+                </div>
+                <h2>Smart Shopping List</h2>
+                <p>Create intelligent shopping lists with detailed product options and variants.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-search-location"></i>
+                </div>
+                <h2>Find Your Store</h2>
+                <p>Locate the nearest store with detailed information about location, hours, and amenities.</p>
+                <button class="nav-btn" id="featureFindStoreBtn">Find Stores</button>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h2>AI Product Assistant</h2>
+                <p>Our AI understands your needs and suggests appropriate product variants.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-map-marked-alt"></i>
+                </div>
+                <h2>Interactive Floorplan</h2>
+                <p>Once you've selected a store, access detailed floorplans to navigate efficiently.</p>
+                <button class="nav-btn disabled" id="featureFloorplanBtn">Select Store First</button>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h2>Personal Account</h2>
+                <p>Save your favorite stores, create shopping lists, and get personalized recommendations.</p>
+                <button class="nav-btn" id="featureLoginBtn">Login / Sign Up</button>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <h2>Product Variants</h2>
+                <p>Select from multiple options for each item in your shopping list.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h2>Checkout Ready</h2>
+                <p>Complete your shopping with all details ready for checkout.</p>
+            </div>
+        </section>
+        
+        <!-- Store Selection Section -->
+        <section class="store-section" id="storeSection">
+            <h2 class="section-title">Find Your Store</h2>
+            <p class="section-subtitle">Select a store location to access detailed information, floorplans, and store-specific features.</p>
+            
+            <div class="store-container">
+                <h3>Available Locations</h3>
+                <div class="store-list">
+                    <div class="store-item" data-store-id="1">
+                        <i class="fas fa-store"></i>
+                        <h3>Store A</h3>
+                        <p>123 Main Street, City Center</p>
+                        <p>Open: 8AM - 10PM</p>
+                    </div>
+                    
+                    <div class="store-item" data-store-id="2">
+                        <i class="fas fa-store"></i>
+                        <h3>Store B</h3>
+                        <p>456 Park Avenue, West District</p>
+                        <p>Open: 9AM - 9PM</p>
+                    </div>
+                    
+                    <div class="store-item" data-store-id="3">
+                        <i class="fas fa-store"></i>
+                        <h3>Store C</h3>
+                        <p>789 Oak Boulevard, Northside</p>
+                        <p>Open: 7AM - 11PM</p>
+                    </div>
+                    
+                    <div class="store-item" data-store-id="4">
+                        <i class="fas fa-store"></i>
+                        <h3>Store D</h3>
+                        <p>101 Pine Road, South Quarter</p>
+                        <p>Open: 8AM - 10PM</p>
+                    </div>
+                </div>
+                
+                <div id="floorplanAccess" style="display: none;">
+                    <h3>Access Floorplan for: <span id="selectedStoreName">Downtown Center</span></h3>
+                    <p>You can now access the detailed floorplan for your selected store</p>
+                    <a href="#" class="nav-btn" id="accessFloorplanBtn">
+                        <i class="fas fa-map-marked-alt"></i>
+                        View Floorplan
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Floorplan Section -->
+        <div class="floorplan-container" id="floorplanContainer">
+            <div class="floorplan-header">
+                <h2 class="section-title">Store Floorplan</h2>
+                <p>Interactive map for <span id="floorplanStoreName">Store A</span></p>
+            </div>
+            
+            <div class="floorplan-content">
+                <div class="floorplan-map">
+                    <div class="map-grid">
+                        <div class="map-area" style="grid-column: 1 / 3; grid-row: 1 / 3;">
+                            <i class="fas fa-shopping-cart"></i>
+                            <h4>Entrance & Checkout</h4>
+                        </div>
+                        <div class="map-area" style="grid-column: 3 / 6; grid-row: 1 / 2;">
+                            <i class="fas fa-apple-alt"></i>
+                            <h4>Produce Section</h4>
+                        </div>
+                        <div class="map-area" style="grid-column: 3 / 4; grid-row: 2 / 4;">
+                            <i class="fas fa-cheese"></i>
+                            <h4>Dairy</h4>
+                        </div>
+                        <div class="map-area" style="grid-column: 4 / 6; grid-row: 2 / 3;">
+                            <i class="fas fa-bread-slice"></i>
+                            <h4>Bakery</h4>
+                        </div>
+                        <div class="map-area" style="grid-column: 1 / 3; grid-row: 3 / 6;">
+                            <i class="fas fa-wine-bottle"></i>
+                            <h4>Beverages</h4>
+                        </div>
+                        <div class="map-area" style="grid-column: 3 / 5; grid-row: 4 / 6;">
+                            <i class="fas fa-drumstick-bite"></i>
+                            <h4>Meat & Poultry</h4>
+                        </div>
+                        <div class="map-area" style="grid-column: 5 / 6; grid-row: 3 / 6;">
+                            <i class="fas fa-snowflake"></i>
+                            <h4>Frozen Foods</h4>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color produce"></div>
+                        <span>Produce</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color dairy"></div>
+                        <span>Dairy</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color bakery"></div>
+                        <span>Bakery</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color meat"></div>
+                        <span>Meat</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color frozen"></div>
+                        <span>Frozen</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Demo Section -->
+        <section class="store-section">
+            <h2 class="section-title">Smart Shopping Demo</h2>
+            <p class="section-subtitle">Try adding items to see the new dropdown selection feature in action</p>
+            
+            <div class="store-container">
+                <div class="store-list">
+                    <div class="store-item" style="cursor: default;">
+                        <i class="fas fa-list-check"></i>
+                        <h3>Try Adding</h3>
+                        <p>Water, Milk, Bread, or Eggs</p>
+                        <p>To see dropdown options</p>
+                    </div>
+                    
+                    <div class="store-item" style="cursor: default;">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>How It Works</h3>
+                        <p>Each item shows relevant variants</p>
+                        <p>Select your preferred option</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>About Grocer-ease</h3>
+                    <p>Grocer-ease is revolutionizing the shopping experience with AI-powered assistance.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <a href="#">Home</a>
+                    <a href="#">Features</a>
+                    <a href="#">How It Works</a>
+                    <a href="#">FAQs</a>
+                    <a href="#">Contact Us</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Smart Shopping Ave</p>
+                    <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@geez.com</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 Grocer-ease. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+     <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div class="login-container">
+                <div class="login-header">
+                    <h1>Welcome Back</h1>
+                    <p>Sign in to access your account</p>
+                </div>
+                
+                <div class="login-content">
+                    <!-- Customer Section (Larger) -->
+                    <div class="customer-section">
+                        <h2 class="section-title">Customer Login</h2>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" placeholder="Enter your email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" placeholder="Enter your password">
+                        </div>
+                        
+                        <button class="btn btn-customer" id="customerLoginBtn">Sign In</button>
+                        
+                        <div class="options">
+                            <div class="option-item" id="createAccountBtn">
+                                <i class="fas fa-user-plus"></i> Create Account
+                            </div>
+                            <div class="option-item" id="forgotPasswordBtn">
+                                <i class="fas fa-key"></i> Forgot Password?
+                            </div>
+                        </div>
+                        
+                        <div class="divider">
+                            <span>or continue with</span>
+                        </div>
+                        
+                        <div class="social-login">
+                            <div class="social-btn fb">
+                                <i class="fab fa-facebook-f"></i>
+                            </div>
+                            <div class="social-btn google">
+                                <i class="fab fa-google"></i>
+                            </div>
+                            <div class="social-btn twitter">
+                                <i class="fab fa-twitter"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Business Section (Smaller) -->
+                    <div class="business-section">
+                        <h2 class="section-title">Business Login</h2>
+                        
+                        <div class="business-option">
+                            <button class="business-btn" id="ownerBtn">
+                                <i class="fas fa-building"></i> Owner Login
+                            </button>
+                        </div>
+                        
+                        <div class="business-option">
+                            <button class="business-btn" id="staffBtn">
+                                <i class="fas fa-users"></i> Staff Login
+                            </button>
+                        </div>
+                        
+                        <div class="business-option" style="margin-top: 40px;">
+                            <p style="color: #666; font-size: 0.9rem; line-height: 1.5;">
+                                <i class="fas fa-info-circle"></i> Business accounts require special permissions. Contact support for access.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Chatbox Modal -->
+    <div class="modal" id="chatModal">
+        <div class="chat-modal-content">
+            <span class="close-modal" id="closeChatModal">&times;</span>
+            
+            <div class="chat-container">
+                <!-- Chat Section -->
+                <div class="chat-section">
+                    <div class="chat-header">
+                        <h1><i class="fas fa-comments"></i> Grocer-ease SMART SHOPPING ASSISTANT</h1>
+                        <p>Add items to your shopping list with detailed selections</p>
+                    </div>
+                    
+                    <div class="chat-messages">
+                        <div class="message bot-message">
+                            Hello! I'm your smart shopping assistant. Try adding items like "water", "milk", or "bread" to see the new selection options!
+                        </div>
+                        <div class="message bot-message">
+                            For example: "Add water to my shopping list"
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input">
+                        <input type="text" id="message-input" placeholder="Ask me to add items to your shopping list...">
+                        <button id="send-btn"><i class="fas fa-paper-plane"></i> Send</button>
+                    </div>
+                </div>
+                
+                <!-- Shopping List Section -->
+                <div class="shopping-section">
+                    <div class="shopping-header">
+                        <h2><i class="fas fa-list-check"></i> Smart Shopping List</h2>
+                    </div>
+                    
+                    <div class="shopping-content">
+                        <ul class="shopping-list">
+                            <!-- Items will be added here -->
+                        </ul>
+                    </div>
+                    
+                    <div class="stats">
+                        <div><i class="fas fa-list"></i> <span id="item-count">0</span> items</div>
+                        <div><i class="fas fa-check-circle"></i> <span id="completed-count">0</span> completed</div>
+                        <div><i class="fas fa-cube"></i> <span id="units-count">0</span> units</div>
+                    </div>
+                    
+                    <div class="add-item">
+                        <input type="text" id="new-item" placeholder="Add new item...">
+                        <button id="add-btn"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                    
+                    <div class="checkout">
+                        <button id="checkout-btn"><i class="fas fa-cash-register"></i> Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const chatBotBtn = document.getElementById('chatBotBtn');
+        const heroChatBtn = document.getElementById('heroChatBtn');
+        const chatModal = document.getElementById('chatModal');
+        const closeChatModal = document.getElementById('closeChatModal');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        const chatMessages = document.querySelector('.chat-messages');
+        const newItemInput = document.getElementById('new-item');
+        const addBtn = document.getElementById('add-btn');
+        const shoppingList = document.querySelector('.shopping-list');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const loginBtn = document.getElementById('loginBtn');
+        const featureLoginBtn = document.getElementById('featureLoginBtn');
+        const loginModal = document.getElementById('loginModal');
+        const closeModal = document.getElementById('closeModal');
+        const customerLoginBtn = document.getElementById('customerLoginBtn');
+        const createAccountBtn = document.getElementById('createAccountBtn');
+        const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+        const findStoreBtn = document.getElementById('findStoreBtn');
+        const heroFindStoreBtn = document.getElementById('heroFindStoreBtn');
+        const featureFindStoreBtn = document.getElementById('featureFindStoreBtn');
+        const storeSection = document.getElementById('storeSection');
+        const storeItems = document.querySelectorAll('.store-item');
+        const floorplanBtn = document.getElementById('floorplanBtn');
+        const featureFloorplanBtn = document.getElementById('featureFloorplanBtn');
+        const accessFloorplanBtn = document.getElementById('accessFloorplanBtn');
+        const selectedStoreName = document.getElementById('selectedStoreName');
+        const floorplanContainer = document.getElementById('floorplanContainer');
+        const floorplanStoreName = document.getElementById('floorplanStoreName');
+        const floorplanAccess = document.getElementById('floorplanAccess');
+        
+        // Product options database
+        const productOptions = {
+            'water': ['Select water type', 'Avian Water', 'Sparkling Water', 'Spring Water', 'Mineral Water', 'Purified Water'],
+            'milk': ['Select milk type', 'Whole Milk', 'Skim Milk', 'Almond Milk', 'Soy Milk', 'Oat Milk'],
+            'bread': ['Select bread type', 'White Bread', 'Whole Wheat Bread', 'Sourdough', 'Multigrain', 'Rye Bread'],
+            'eggs': ['Select egg type', 'Large Eggs', 'Medium Eggs', 'Free Range Eggs', 'Organic Eggs', 'Jumbo Eggs'],
+            'cheese': ['Select cheese type', 'Cheddar', 'Mozzarella', 'Swiss', 'Provolone', 'Blue Cheese'],
+            'default': ['Select product variant', 'Standard', 'Premium', 'Organic', 'Large', 'Small']
+        };
+        
+        // Show chat modal
+        function showChatModal() {
+            chatModal.style.display = 'flex';
+        }
+        
+        // Close modal
+        function closeModalFn() {
+            chatModal.style.display = 'none';
+            loginModal.style.display = 'none';
+        }
+        
+        // Show login modal
+        function showLoginModal() {
+            loginModal.style.display = 'flex';
+        }
+        
+        // Event listeners for opening modals
+        chatBotBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showChatModal();
+        });
+        
+        heroChatBtn.addEventListener('click', function() {
+            showChatModal();
+        });
+        
+        if (loginBtn) {
+            loginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showLoginModal();
+            });
+        }
+        
+        if (featureLoginBtn) {
+            featureLoginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showLoginModal();
+            });
+        }
+        
+        // Close modals
+        closeChatModal.addEventListener('click', closeModalFn);
+        closeModal.addEventListener('click', closeModalFn);
+        
+        // Close modals if clicked outside
+        window.addEventListener('click', function(e) {
+            if (e.target === chatModal || e.target === loginModal) {
+                closeModalFn();
+            }
+        });
+        
+        // Login functionality
+        customerLoginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (email && password) {
+                alert('Login successful!');
+                loginModal.style.display = 'none';
+            } else {
+                alert('Please enter both email and password');
+            }
+        });
+        
+        createAccountBtn.addEventListener('click', function() {
+            alert('Redirecting to account creation...');
+        });
+        
+        forgotPasswordBtn.addEventListener('click', function() {
+            alert('Redirecting to password recovery...');
+        });
+        
+        // Store finder functionality
+        function scrollToStoreSection() {
+            storeSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        if (findStoreBtn) {
+            findStoreBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                scrollToStoreSection();
+            });
+        }
+        
+        if (heroFindStoreBtn) {
+            heroFindStoreBtn.addEventListener('click', function() {
+                scrollToStoreSection();
+            });
+        }
+        
+        if (featureFindStoreBtn) {
+            featureFindStoreBtn.addEventListener('click', function() {
+                scrollToStoreSection();
+            });
+        }
+        
+        // Store selection functionality
+        storeItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove selected class from all items
+                storeItems.forEach(i => i.classList.remove('selected-store'));
+                
+                // Add selected class to clicked item
+                this.classList.add('selected-store');
+                
+                // Get store name
+                const storeName = this.querySelector('h3').textContent;
+                selectedStoreName.textContent = storeName;
+                floorplanStoreName.textContent = storeName;
+                
+                // Show floorplan access section
+                floorplanAccess.style.display = 'block';
+                
+                // Enable floorplan buttons
+                floorplanBtn.classList.remove('disabled');
+                featureFloorplanBtn.classList.remove('disabled');
+                featureFloorplanBtn.textContent = "View Floorplan";
+                
+                // Scroll to floorplan access section
+                floorplanAccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        });
+        
+        // Floorplan functionality
+        function showFloorplan() {
+            floorplanContainer.style.display = 'block';
+            floorplanContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        
+        
+        if (featureFloorplanBtn) {
+            featureFloorplanBtn.addEventListener('click', function(e) {
+                if (!this.classList.contains('disabled')) {
+                    e.preventDefault();
+                    showFloorplan();
+                }
+            });
+        }
+        
+        if (accessFloorplanBtn) {
+            accessFloorplanBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showFloorplan();
+            });
+        }
+        
+        // Add message to chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', `${sender}-message`);
+            
+            const now = new Date();
+            const timeString = now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
+            
+            messageDiv.innerHTML = `${text} <span class="message-time">${timeString}</span>`;
+            chatMessages.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Add shopping item with dropdown
+        function addShoppingItem(itemName) {
+            if (!itemName.trim()) return;
+            
+            const id = 'item' + (shoppingList.children.length + 1);
+            const normalizedItem = itemName.toLowerCase();
+            const options = productOptions[normalizedItem] || productOptions['default'];
+            
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="item-details">
+                    <input type="checkbox" id="${id}">
+                    <label for="${id}">${itemName}</label>
+                </div>
+                <div class="item-options">
+                    <select class="item-variant" id="variant-${id}">
+                        ${options.map(option => `<option>${option}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="item-controls">
+                    <div class="quantity-controls">
+                        <button class="quantity-btn minus-btn"><i class="fas fa-minus"></i></button>
+                        <span class="quantity-value">1</span>
+                        <button class="quantity-btn plus-btn"><i class="fas fa-plus"></i></button>
+                    </div>
+                    <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+            
+            shoppingList.appendChild(li);
+            
+            // Add event listeners
+            const checkbox = li.querySelector('input');
+            const label = li.querySelector('label');
+            const deleteBtn = li.querySelector('.delete-btn');
+            const minusBtn = li.querySelector('.minus-btn');
+            const plusBtn = li.querySelector('.plus-btn');
+            const quantityValue = li.querySelector('.quantity-value');
+            const variantSelect = li.querySelector('.item-variant');
+            
+            // Quantity controls
+            minusBtn.addEventListener('click', function() {
+                let value = parseInt(quantityValue.textContent);
+                if (value > 1) {
+                    value--;
+                    quantityValue.textContent = value;
+                    updateStats();
+                }
+            });
+            
+            plusBtn.addEventListener('click', function() {
+                let value = parseInt(quantityValue.textContent);
+                value++;
+                quantityValue.textContent = value;
+                updateStats();
+            });
+            
+            // Checkbox functionality
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    label.classList.add('completed');
+                } else {
+                    label.classList.remove('completed');
+                }
+                updateStats();
+            });
+            
+            // Delete button
+            deleteBtn.addEventListener('click', function() {
+                li.remove();
+                updateStats();
+            });
+            
+            // Variant change
+            variantSelect.addEventListener('change', function() {
+                updateStats();
+            });
+            
+            // Clear input
+            newItemInput.value = '';
+            messageInput.value = '';
+            
+            // Update stats
+            updateStats();
+            
+            // Add confirmation message
+            addMessage(`Added "${itemName}" to your shopping list`, 'bot');
+        }
+        
+        // Update shopping list stats
+        function updateStats() {
+            const totalItems = shoppingList.children.length;
+            const completedItems = shoppingList.querySelectorAll('input:checked').length;
+            
+            // Calculate total units
+            let totalUnits = 0;
+            document.querySelectorAll('.quantity-value').forEach(el => {
+                totalUnits += parseInt(el.textContent);
+            });
+            
+            // Update stats display
+            document.getElementById('item-count').textContent = totalItems;
+            document.getElementById('completed-count').textContent = completedItems;
+            document.getElementById('units-count').textContent = totalUnits;
+        }
+        
+        // Process chat commands
+        function processChatCommand(message) {
+            const addRegex = /add\s+(.+)\s+to\s+(?:my\s+)?shopping\s+list/i;
+            
+            if (addRegex.test(message)) {
+                const match = message.match(addRegex);
+                const item = match[1].trim();
+                addShoppingItem(item);
+                return true;
+            }
+            
+            return false;
+        }
+        
+        // Send message
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                // Add user message
+                addMessage(message, 'user');
+                
+                // Process command
+                const commandProcessed = processChatCommand(message);
+                
+                if (!commandProcessed) {
+                    // Default bot response
+                    setTimeout(() => {
+                        addMessage("I can help you add items to your shopping list. Try saying: 'Add water to my shopping list'", 'bot');
+                    }, 500);
+                }
+                
+                // Clear input
+                messageInput.value = '';
+            }
+        }
+        
+        // Event listeners for chat
+        sendBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        // Event listeners for shopping list
+        addBtn.addEventListener('click', function() {
+            addShoppingItem(newItemInput.value);
+        });
+        
+        newItemInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addShoppingItem(newItemInput.value);
+        });
+        
+        // Checkout functionality
+        checkoutBtn.addEventListener('click', function() {
+            const items = [];
+            shoppingList.querySelectorAll('li').forEach(li => {
+                const itemName = li.querySelector('label').textContent;
+                const variant = li.querySelector('.item-variant').value;
+                const quantity = li.querySelector('.quantity-value').textContent;
+                const completed = li.querySelector('input').checked;
+                
+                if (!completed) {
+                    items.push({
+                        name: itemName,
+                        variant: variant,
+                        quantity: quantity
+                    });
+                }
+            });
+            
+            if (items.length === 0) {
+                alert("Your shopping list is empty or all items are completed!");
+                return;
+            }
+            
+            // Create receipt
+            let receipt = "Smart Shopping List Checkout:\n\n";
+            let totalItems = 0;
+            
+            items.forEach(item => {
+                receipt += `- ${item.quantity}x ${item.name} (${item.variant})\n`;
+                totalItems += parseInt(item.quantity);
+            });
+            
+            receipt += `\nTotal Items: ${totalItems}`;
+            
+            alert(receipt);
+        });
+        
+        // Initialize stats
+        updateStats();
+        
+    </script>
+</body>
+</html>

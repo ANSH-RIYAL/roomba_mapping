@@ -1,0 +1,88 @@
+
+.sidebar {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    width: 260px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.8rem;
+    text-decoration: none;
+    padding: 0 25px 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 25px;
+}
+
+.logo i {
+    margin-right: 10px;
+    font-size: 2rem;
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 15px;
+}
+
+.nav-btn {
+    padding: 14px 20px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.nav-btn.disabled {
+    background: rgba(255, 255, 255, 0.08);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.nav-btn i {
+    font-size: 1.4rem;
+}
+
+.logout-btn {
+    background: linear-gradient(90deg, #4b6cb7, #182848);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(75, 108, 183, 0.4);
+}
+
+.logout-btn:hover {
+    background: linear-gradient(90deg, #3a5ba0, #121d3d);
+    transform: translateY(-2px);
+}

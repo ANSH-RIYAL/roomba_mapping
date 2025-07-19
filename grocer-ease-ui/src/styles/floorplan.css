@@ -1,0 +1,205 @@
+
+.floorplan-page {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.floorplan-page header {
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.floorplan-page h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #4cc9f0, #4361ee);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    opacity: 0.85;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #a9d6e5;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    max-width: 1200px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.floorplan-container {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 25px;
+    width: 100%;
+    max-width: 850px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    background: rgba(67, 97, 238, 0.2);
+    color: #4cc9f0;
+    border: 1px solid rgba(76, 201, 240, 0.3);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background: rgba(76, 201, 240, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn.active {
+    background: rgba(76, 201, 240, 0.4);
+    box-shadow: 0 0 15px rgba(76, 201, 240, 0.3);
+}
+
+.floorplan-wrapper {
+    background: rgba(0, 5, 20, 0.3);
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    min-height: 500px;
+    overflow: auto;
+}
+
+.svg-container {
+    width: 100%;
+    height: 600px;
+    background: rgba(10, 15, 40, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.svg-container svg {
+    width: 100%;
+    height: 100%;
+}
+
+.tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    max-width: 250px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    z-index: 10;
+}
+
+.info-panel {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    padding: 25px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.info-panel h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #4cc9f0;
+}
+
+.instructions {
+    background: rgba(10, 20, 50, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.instructions h3 {
+    color: #4cc9f0;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.instructions ul {
+    padding-left: 20px;
+}
+
+.instructions li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+    color: #caf0f8;
+}
+
+.data-display {
+    background: rgba(10, 20, 50, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.data-display h3 {
+    color: #4cc9f0;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.data-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.data-label {
+    font-weight: 600;
+    color: #90e0ef;
+}
+
+.data-value {
+    color: #caf0f8;
+}
+
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .info-panel {
+        max-width: 100%;
+    }
+}

@@ -1,0 +1,20 @@
+Shows the progress of each of the files uploaded and what else needs to be done/make changes to them -
+
+INTERACTIVE FLOORPLAN 
+- needs to be integrated to the launch page
+- hover function needs to be better
+- info showing on the bottom needs to show on the side i.e basic ui changes
+- need to coonect with MongoDB so that actual item show instead of dummy
+- has data hardcoded for the vertices/faces, need to connect to DB
+
+LAUNCH PAGE
+- AI chat box needs to be integrated in the section
+- the logins needs to be done via MongoDB
+
+
+STAFF PAGE
+- requires basic UI change, the logout button needs change
+- the additional functions should work
+
+CHECKOUT PAGE
+- not a priority, basic UI changes
